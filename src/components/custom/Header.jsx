@@ -16,8 +16,10 @@ import {
 } from "@/components/ui/dialog";
 import { FcGoogle } from "react-icons/fc";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 function Header() {
+  const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem("user"));
   const [openDailog,setOpenDailog]=useState(false);
@@ -56,7 +58,7 @@ function Header() {
 
   return (
     <div className="p-3 shadow-sm flex justify-between items-center px-5">
-      <img src="/logo.png" className="h-20 w-20 object-cover" />
+        <img src="/logo.png" className="h-20 w-20 object-cover cursor-pointer" alt="Logo" onClick={()=>navigate('/')}  />
       <div>
         {user ? (
           <div className="flex items-center gap-3">

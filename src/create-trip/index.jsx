@@ -32,7 +32,7 @@ function CreateTrip() {
   const [openDailog, setOpenDailog] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const handleInputChange = (name, value) => {
     setFormData({
@@ -97,7 +97,7 @@ function CreateTrip() {
       id: docId,
     });
     setLoading(false);
-    navigate('/view-trip/'+docId)
+    navigate("/view-trip/" + docId);
   };
   const GetUserProfile = (tokenInfo) => {
     axios
@@ -136,11 +136,14 @@ function CreateTrip() {
           <GooglePlacesAutocomplete
             apiKey={import.meta.env.VITE_GOOGLE_PLACE_API_KEY}
             selectProps={{
-              place,
+              value: place,
               onChange: (v) => {
                 setPlace(v);
                 handleInputChange("location", v);
               },
+              placeholder: "Type your location (e.g., Paris, France)",
+              noOptionsMessage: () => "No results found. Try another location.",
+              loadingMessage: () => "Searching...",
             }}
           />
         </div>
@@ -150,9 +153,18 @@ function CreateTrip() {
             How many days are you planning your trip?
           </h2>
           <Input
-            placeholder={"Ex.3"}
+            placeholder={"Ex. 3"}
             type="number"
-            onChange={(e) => handleInputChange("noOfDays", e.target.value)}
+            min="1" // Ensures no negative numbers via UI controls
+            value={formData.noOfDays || ""}
+            onChange={(e) => {
+              const value = e.target.value;
+
+              // Allow empty input for smooth deletion, otherwise update state only for positive numbers
+              if (value === "" || Number(value) >= 1) {
+                handleInputChange("noOfDays", value);
+              }
+            }}
           />
         </div>
       </div>
@@ -220,7 +232,7 @@ function CreateTrip() {
                 className="w-full mt-5 flex gap-4 items-center"
               >
                 <FcGoogle className="h-7 w-7" />
-                Sign In With Google 
+                Sign In With Google
               </Button>
             </DialogDescription>
           </DialogHeader>
